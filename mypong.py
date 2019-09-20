@@ -6,6 +6,10 @@
 
 import turtle
 import os
+import sys
+
+# modos de jogo player vs player / player vs bot / bot vs bot
+player_mode = sys.argv[1] # "-2" "-1" "-0"
 
 # desenhar tela
 screen = turtle.Screen()
@@ -91,10 +95,12 @@ def paddle_2_down():
 
 # mapeando as teclas
 screen.listen()
-screen.onkeypress(paddle_1_up,"w")
-screen.onkeypress(paddle_1_down,"s")
-screen.onkeypress(paddle_2_up,"Up")
-screen.onkeypress(paddle_2_down,"Down")
+if player_mode == '-2' or player_mode == '-1':
+    screen.onkeypress(paddle_1_up,"w")
+    screen.onkeypress(paddle_1_down,"s")
+if player_mode == '-2':
+    screen.onkeypress(paddle_2_up,"Up")
+    screen.onkeypress(paddle_2_down,"Down")
 
 while True:
     screen.update()
@@ -143,3 +149,9 @@ while True:
     if ball.xcor() > 330 and ball.ycor() < paddle_2.ycor() + 50 and ball.ycor() > paddle_2.ycor() - 50:
         ball.dx *= -1
         os.system("afplay bounce.wav&")
+
+    #raquetes em modo de jogo
+    if player_mode == '-1' or player_mode == '-0':
+        paddle_2.sety(ball.ycor())
+    if player_mode == '-0':
+        paddle_1.sety(ball.ycor())
