@@ -7,6 +7,7 @@
 import turtle
 import os
 import sys
+import random
 
 # modos de jogo player vs player / player vs bot / bot vs bot
 player_mode = sys.argv[1] # "-2" "-1" "-0"
@@ -142,7 +143,7 @@ while True:
 
     # colisão com raquete 1
     if ball.xcor() < -330 and ball.ycor() < paddle_1.ycor() + 50 and ball.ycor() > paddle_1.ycor() - 50:
-        ball.dx *= -1     
+        ball.dx *= -1
         os.system("afplay bounce.wav&")   
     
     # colisão com raquete 2
@@ -152,6 +153,16 @@ while True:
 
     #raquetes em modo de jogo
     if player_mode == '-1' or player_mode == '-0':
-        paddle_2.sety(ball.ycor())
+        if ball.dx > 0 and paddle_2.ycor() < ball.ycor():
+            a = paddle_2.ycor()
+            paddle_2.sety(a + 2)
+        if ball.dx > 0 and paddle_2.ycor() > ball.ycor():
+            a = paddle_2.ycor()
+            paddle_2.sety(a - 2)
     if player_mode == '-0':
-        paddle_1.sety(ball.ycor())
+        if ball.dx < 0 and paddle_1.ycor() < ball.ycor():
+            a = paddle_1.ycor()
+            paddle_1.sety(a + 2)
+        if ball.dx < 0 and paddle_1.ycor() > ball.ycor():
+            a = paddle_1.ycor()
+            paddle_1.sety(a - 2)
