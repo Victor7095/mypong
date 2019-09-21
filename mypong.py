@@ -45,12 +45,15 @@ ball.shape("circle")
 ball.color("#e8971e")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 2
-ball.dy = 2
+ball.dx = 0.5
+ball.dy = 0.5
 
 # pontuação
 score_1 = 0
 score_2 = 0
+
+#Condição pra terminar o jogo
+GameOn = True
 
 # head-up display da pontuação
 board_1 = turtle.Turtle()
@@ -101,7 +104,6 @@ create_line(-250, -245, -250, 245)
 create_line(250, -245, 250, 245)
 create_line(250, 0, -250, 0)
 
-
 # mover raquete 1
 def paddle_1_up():
     y = paddle_1.ycor()
@@ -149,13 +151,17 @@ def update_ball_speed(paddle):
 # mapeando as teclas
 screen.listen()
 if player_mode == '-2' or player_mode == '-1':
-    screen.onkeypress(paddle_1_up, "w")
-    screen.onkeypress(paddle_1_down, "s")
+    if (paddle_1.ycor()<225):
+        screen.onkeypress(paddle_1_up, "w")
+    if (paddle_1.ycor()<-225):    
+        screen.onkeypress(paddle_1_down, "s")
 if player_mode == '-2':
-    screen.onkeypress(paddle_2_up, "Up")
-    screen.onkeypress(paddle_2_down, "Down")
+    if (paddle_2.ycor()<225):   
+        screen.onkeypress(paddle_2_up, "Up")
+    if (paddle_2.ycor()<-225):    
+        screen.onkeypress(paddle_2_down, "Down")
 
-while True:
+while GameOn:
     screen.update()
 
     # movimentação da bola
@@ -163,19 +169,19 @@ while True:
     ball.sety(ball.ycor() + ball.dy)
 
     # colisão com parede superior
-    if ball.ycor() > 290:
+    if ball.ycor() > 287:
         os.system("aplay bounce.wav&")
-        ball.sety(290)
+        ball.sety(287)
         ball.dy *= -1
 
     # colisão com parede inferior
-    if ball.ycor() < -280:
+    if ball.ycor() < -277:
         os.system("aplay bounce.wav&")
-        ball.sety(-280)
+        ball.sety(-277)
         ball.dy *= -1
 
     # colisão com parede esquerda
-    if ball.xcor() < -390:
+    if ball.xcor() < -385:
         score_2 += 1
         board_2.clear()
         board_2.write(score_2, align="center",
@@ -186,7 +192,7 @@ while True:
         ball.dx *= -1
 
     # colisão com parede direita
-    if ball.xcor() > 390:
+    if ball.xcor() > 385:
         score_1 += 1
         board_1.clear()
         board_1.write(score_1, align="center",
@@ -214,16 +220,33 @@ while True:
 
     # raquetes em modo de jogo
     if player_mode == '-1' or player_mode == '-0':
-        if paddle_2.ycor() < ball.ycor():
+        if (paddle_2.ycor() < ball.ycor()) and ( (paddle_2.ycor()<250)and (paddle_2.ycor()>-250)):
             a = paddle_2.ycor()
             paddle_2.sety(a + 2)
-        if paddle_2.ycor() > ball.ycor():
+        else:
+            paddle_2.sety(a-2)
+        if paddle_2.ycor() > ball.ycor() and ( (paddle_2.ycor()<250)and (paddle_2.ycor()>-250)):
             a = paddle_2.ycor()
             paddle_2.sety(a - 2)
+        else:
+            paddle_2.sety(a+2)
     if player_mode == '-0':
-        if paddle_1.ycor() < ball.ycor():
+        if paddle_1.ycor() < ball.ycor()and ( (paddle_1.ycor()<250)and (paddle_1.ycor()>-250)):
             a = paddle_1.ycor()
             paddle_1.sety(a + 2)
-        if paddle_1.ycor() > ball.ycor():
+        else:
+            paddle_1.sety(a-2)
+        if paddle_1.ycor() > ball.ycor() and ( (paddle_1. ycor()< 250)and (paddle_1.ycor()>-250)):
             a = paddle_1.ycor()
             paddle_1.sety(a - 2)
+        else:
+            paddle_1.sety(a+2)
+
+    if((score_1>=5)or(score_2>=5)):
+        GameOn = False
+        if score_2 == 5:
+            print("Parabéns jogador 2!")
+        else:
+            print("Parabéns jogador 1!")
+    else:
+        GameOn = True
