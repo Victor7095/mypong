@@ -179,6 +179,7 @@ while True:
         board_2.write(score_2, align="center",
                       font=("DS-Digital", 35, "normal"))
         os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
+        ball.dx = ball.dy = 2
         ball.goto(0, 0)
         ball.dx *= -1
 
@@ -189,6 +190,7 @@ while True:
         board_1.write(score_1, align="center",
                       font=("DS-Digital", 35, "normal"))
         os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
+        ball.dx = ball.dy = 2
         ball.goto(0, 0)
         ball.dx *= -1
 
