@@ -2,6 +2,7 @@
 # pong em turtle python https://docs.python.org/3.3/library/turtle.html
 # baseado em http://christianthompson.com/node/51
 # fonte Press Start 2P https://www.fontspace.com/codeman38/press-start-2p
+# fonte DS-Digital https://www.dafont.com/pt/ds-digital.font
 # som pontuação https://freesound.org/people/Kodack/sounds/258020/
 
 import turtle
@@ -15,7 +16,7 @@ player_mode = sys.argv[1]  # "-2" "-1" "-0"
 # desenhar tela
 screen = turtle.Screen()
 screen.title("My Pong")
-screen.bgcolor("black")
+screen.bgcolor("#377352")
 screen.setup(width=800, height=600)
 screen.tracer(100)
 
@@ -23,7 +24,7 @@ screen.tracer(100)
 paddle_1 = turtle.Turtle()
 paddle_1.speed(0)
 paddle_1.shape("square")
-paddle_1.color("white")
+paddle_1.color("black", "#5ca3ff")
 paddle_1.shapesize(stretch_wid=5, stretch_len=1)
 paddle_1.penup()
 paddle_1.goto(-350, 0)
@@ -32,7 +33,7 @@ paddle_1.goto(-350, 0)
 paddle_2 = turtle.Turtle()
 paddle_2.speed(0)
 paddle_2.shape("square")
-paddle_2.color("white")
+paddle_2.color("black", "#ff6161")
 paddle_2.shapesize(stretch_wid=5, stretch_len=1)
 paddle_2.penup()
 paddle_2.goto(350, 0)
@@ -40,8 +41,8 @@ paddle_2.goto(350, 0)
 # desenhar bola
 ball = turtle.Turtle()
 ball.speed(0)
-ball.shape("square")
-ball.color("white")
+ball.shape("circle")
+ball.color("#e8971e")
 ball.penup()
 ball.goto(0, 0)
 ball.dx = 2
@@ -52,18 +53,55 @@ score_1 = 0
 score_2 = 0
 
 # head-up display da pontuação
-hud = turtle.Turtle()
-hud.speed(0)
-hud.shape("square")
-hud.color("white")
-hud.penup()
-hud.hideturtle()
-hud.goto(0, 260)
-hud.write("0 : 0", align="center", font=("Press Start 2P", 24, "normal"))
+board_1 = turtle.Turtle()
+board_1.speed(0)
+board_1.shape("square")
+board_1.color("#5ca3ff")
+board_1.penup()
+board_1.hideturtle()
+board_1.goto(-100, 250)
+board_1.write("0", align="center", font=("DS-Digital", 35, "normal"))
+
+board_2 = turtle.Turtle()
+board_2.speed(0)
+board_2.shape("square")
+board_2.color("#ff6161")
+board_2.penup()
+board_2.hideturtle()
+board_2.goto(100, 250)
+board_2.write("0", align="center", font=("DS-Digital", 35, "normal"))
+
+
+# rede (tracejados do centro)
+dashed = turtle.Turtle()
+dashed.color("white")
+dashed.penup()
+dashed.hideturtle()
+axis_y = 0
+while axis_y >= -600:
+    dashed.goto(0, 276+axis_y)
+    dashed.write("|", align="center", font=("DS-Digital", 15, "bold"))
+    axis_y -= 30
+
+
+# linhas da mesa
+def create_line(x1, y1, x2, y2):
+    line = turtle.Turtle()
+    line.penup()
+    line.setpos(x1, y1)
+    line.color("white")
+    line.pendown()
+    line.setpos(x2, y2)
+    line.hideturtle()
+
+create_line(-405, 245, 405, 245)
+create_line(-405, -245, 405, -245)
+create_line(-250, -245, -250, 245)
+create_line(250, -245, 250, 245)
+create_line(250, 0, -250, 0)
+
 
 # mover raquete 1
-
-
 def paddle_1_up():
     y = paddle_1.ycor()
     if y < 250:
@@ -137,9 +175,9 @@ while True:
     # colisão com parede esquerda
     if ball.xcor() < -390:
         score_2 += 1
-        hud.clear()
-        hud.write("{} : {}".format(score_1, score_2), align="center",
-                  font=("Press Start 2P", 24, "normal"))
+        board_2.clear()
+        board_2.write(score_2, align="center",
+                      font=("DS-Digital", 35, "normal"))
         os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
         ball.goto(0, 0)
         ball.dx *= -1
@@ -147,9 +185,9 @@ while True:
     # colisão com parede direita
     if ball.xcor() > 390:
         score_1 += 1
-        hud.clear()
-        hud.write("{} : {}".format(score_1, score_2), align="center",
-                  font=("Press Start 2P", 24, "normal"))
+        board_1.clear()
+        board_1.write(score_1, align="center",
+                      font=("DS-Digital", 35, "normal"))
         os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
         ball.goto(0, 0)
         ball.dx *= -1
