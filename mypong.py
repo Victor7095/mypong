@@ -94,6 +94,7 @@ def create_line(x1, y1, x2, y2):
     line.setpos(x2, y2)
     line.hideturtle()
 
+
 create_line(-405, 245, 405, 245)
 create_line(-405, -245, 405, -245)
 create_line(-250, -245, -250, 245)
@@ -140,6 +141,7 @@ def paddle_2_down():
 
 # Ajustar velocidade da bola
 def update_ball_speed(paddle):
+    ball.dx = ball.dx + 1 if ball.dx > 0 else ball.dx - 1
     segment = int(abs(paddle.ycor()-ball.ycor()) / 8)
     ball.dy = 2 + segment if ball.dy > 0 else -2 - segment
 
