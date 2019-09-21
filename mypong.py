@@ -210,16 +210,16 @@ while True:
 
     # raquetes em modo de jogo
     if player_mode == '-1' or player_mode == '-0':
-        if ball.dx > 0 and paddle_2.ycor() < ball.ycor():
+        if paddle_2.ycor() < ball.ycor():
             a = paddle_2.ycor()
             paddle_2.sety(a + 2)
-        if ball.dx > 0 and paddle_2.ycor() > ball.ycor():
+        if paddle_2.ycor() > ball.ycor():
             a = paddle_2.ycor()
             paddle_2.sety(a - 2)
     if player_mode == '-0':
-        if ball.dx < 0 and paddle_1.ycor() < ball.ycor():
+        if paddle_1.ycor() < ball.ycor():
             a = paddle_1.ycor()
             paddle_1.sety(a + 2)
-        if ball.dx < 0 and paddle_1.ycor() > ball.ycor():
+        if paddle_1.ycor() > ball.ycor():
             a = paddle_1.ycor()
             paddle_1.sety(a - 2)
