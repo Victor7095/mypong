@@ -15,4 +15,6 @@
 
 ## Fonte Press Start 2P https://www.fontspace.com/codeman38/press-start-2p
 
+## Fonte DS-Digital https://www.dafont.com/pt/ds-digital.font
+
 ## Som pontuação https://freesound.org/people/Kodack/sounds/258020/
