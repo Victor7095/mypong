@@ -5,13 +5,16 @@
 # fonte DS-Digital https://www.dafont.com/pt/ds-digital.font
 # som pontuação https://freesound.org/people/Kodack/sounds/258020/
 
+
 import turtle
 import os
 import sys
 import random
 
-# modos de jogo player vs player / player vs bot / bot vs bot
-player_mode = sys.argv[1]  # "-2" "-1" "-0"
+
+# modos de jogo player vs player (-2) / player vs bot (-1) / bot vs bot (-0)
+player_mode = sys.argv[1]
+
 
 # desenhar tela
 screen = turtle.Screen()
@@ -20,23 +23,21 @@ screen.bgcolor("#377352")
 screen.setup(width=800, height=600)
 screen.tracer(100)
 
-# desenhar raquete 1
-paddle_1 = turtle.Turtle()
-paddle_1.speed(0)
-paddle_1.shape("square")
-paddle_1.color("black", "#5ca3ff")
-paddle_1.shapesize(stretch_wid=5, stretch_len=1)
-paddle_1.penup()
-paddle_1.goto(-350, 0)
 
-# desenhar raquete 2
+# desenhar raquetes
+def drawn_paddles(paddle, color, x):
+    paddle.speed(0)
+    paddle.shape("square")
+    paddle.color("black", color)
+    paddle.shapesize(stretch_wid=5, stretch_len=1)
+    paddle.penup()
+    paddle.goto(x, 0)
+
+paddle_1 = turtle.Turtle()
+drawn_paddles(paddle_1, "#5ca3ff", -350)
 paddle_2 = turtle.Turtle()
-paddle_2.speed(0)
-paddle_2.shape("square")
-paddle_2.color("black", "#ff6161")
-paddle_2.shapesize(stretch_wid=5, stretch_len=1)
-paddle_2.penup()
-paddle_2.goto(350, 0)
+drawn_paddles(paddle_2, "#ff6161", 350)
+
 
 # desenhar bola
 ball = turtle.Turtle()
@@ -48,31 +49,25 @@ ball.goto(0, 0)
 ball.dx = 0.5
 ball.dy = 0.5
 
-# pontuação
-score_1 = 0
-score_2 = 0
 
-#Condição pra terminar o jogo
-GameOn = True
+# pontuação
+score_1 = score_2 = 0
+
 
 # head-up display da pontuação
-board_1 = turtle.Turtle()
-board_1.speed(0)
-board_1.shape("square")
-board_1.color("#5ca3ff")
-board_1.penup()
-board_1.hideturtle()
-board_1.goto(-100, 250)
-board_1.write("0", align="center", font=("DS-Digital", 35, "normal"))
+def create_boards(board, color, x):
+    board.speed(0)
+    board.shape("square")
+    board.color(color)
+    board.penup()
+    board.hideturtle()
+    board.goto(x, 250)
+    board.write("0", align="center", font=("DS-Digital", 35, "normal"))
 
+board_1 = turtle.Turtle()
+create_boards(board_1, "#5ca3ff", -100)
 board_2 = turtle.Turtle()
-board_2.speed(0)
-board_2.shape("square")
-board_2.color("#ff6161")
-board_2.penup()
-board_2.hideturtle()
-board_2.goto(100, 250)
-board_2.write("0", align="center", font=("DS-Digital", 35, "normal"))
+create_boards(board_2, "#ff6161", 100)
 
 
 # rede (tracejados do centro)
@@ -97,12 +92,12 @@ def create_line(x1, y1, x2, y2):
     line.setpos(x2, y2)
     line.hideturtle()
 
-
 create_line(-405, 245, 405, 245)
 create_line(-405, -245, 405, -245)
 create_line(-250, -245, -250, 245)
 create_line(250, -245, 250, 245)
 create_line(250, 0, -250, 0)
+
 
 # mover raquete 1
 def paddle_1_up():
@@ -123,6 +118,7 @@ def paddle_1_down():
     paddle_1.sety(y)
 
 
+# mover raquete 2
 def paddle_2_up():
     y = paddle_2.ycor()
     if y < 250:
@@ -141,25 +137,29 @@ def paddle_2_down():
     paddle_2.sety(y)
 
 
-# Ajustar velocidade da bola
+# mapeamento das teclas
+screen.listen()
+if player_mode == '-2' or player_mode == '-1':
+    # if (paddle_1.ycor() < 225): --> isso está impedindo que as raquetes se movam para baixo
+        screen.onkeypress(paddle_1_up, "w")
+    # if (paddle_1.ycor() < -225):
+        screen.onkeypress(paddle_1_down, "s")
+if player_mode == '-2':
+    # if (paddle_2.ycor() < 225):
+        screen.onkeypress(paddle_2_up, "Up")
+    # if (paddle_2.ycor() < -225):
+        screen.onkeypress(paddle_2_down, "Down")
+
+
+# ajustar velocidade da bola
 def update_ball_speed(paddle):
     ball.dx = ball.dx + 1 if ball.dx > 0 else ball.dx - 1
     segment = int(abs(paddle.ycor()-ball.ycor()) / 8)
     ball.dy = 2 + segment if ball.dy > 0 else -2 - segment
 
 
-# mapeando as teclas
-screen.listen()
-if player_mode == '-2' or player_mode == '-1':
-    if (paddle_1.ycor()<225):
-        screen.onkeypress(paddle_1_up, "w")
-    if (paddle_1.ycor()<-225):    
-        screen.onkeypress(paddle_1_down, "s")
-if player_mode == '-2':
-    if (paddle_2.ycor()<225):   
-        screen.onkeypress(paddle_2_up, "Up")
-    if (paddle_2.ycor()<-225):    
-        screen.onkeypress(paddle_2_down, "Down")
+# condição pra terminar o jogo
+GameOn = True
 
 while GameOn:
     screen.update()
@@ -203,7 +203,7 @@ while GameOn:
         ball.dx *= -1
 
     # colisão com raquete 1
-    if(ball.xcor() < -330 and
+    if (ball.xcor() < -330 and
        ball.ycor() < paddle_1.ycor() + 50 and
        ball.ycor() > paddle_1.ycor() - 50):
         ball.dx *= -1
@@ -211,7 +211,7 @@ while GameOn:
         update_ball_speed(paddle_1)
 
     # colisão com raquete 2
-    if(ball.xcor() > 330 and
+    if (ball.xcor() > 330 and
        ball.ycor() < paddle_2.ycor() + 50 and
        ball.ycor() > paddle_2.ycor() - 50):
         ball.dx *= -1
@@ -220,29 +220,38 @@ while GameOn:
 
     # raquetes em modo de jogo
     if player_mode == '-1' or player_mode == '-0':
-        if (paddle_2.ycor() < ball.ycor()) and ( (paddle_2.ycor()<250)and (paddle_2.ycor()>-250)):
+        if (paddle_2.ycor() < ball.ycor() and
+           paddle_2.ycor() < 250 and
+           paddle_2.ycor() > -250):
             a = paddle_2.ycor()
             paddle_2.sety(a + 2)
         else:
-            paddle_2.sety(a-2)
-        if paddle_2.ycor() > ball.ycor() and ( (paddle_2.ycor()<250)and (paddle_2.ycor()>-250)):
+            paddle_2.sety(a - 2)
+        if (paddle_2.ycor() > ball.ycor() and
+           paddle_2.ycor() < 250 and
+           paddle_2.ycor() > -250):
             a = paddle_2.ycor()
             paddle_2.sety(a - 2)
         else:
-            paddle_2.sety(a+2)
+            paddle_2.sety(a + 2)
     if player_mode == '-0':
-        if paddle_1.ycor() < ball.ycor()and ( (paddle_1.ycor()<250)and (paddle_1.ycor()>-250)):
+        if (paddle_1.ycor() < ball.ycor() and
+           paddle_1.ycor() < 250 and
+           paddle_1.ycor() > -250):
             a = paddle_1.ycor()
             paddle_1.sety(a + 2)
         else:
-            paddle_1.sety(a-2)
-        if paddle_1.ycor() > ball.ycor() and ( (paddle_1. ycor()< 250)and (paddle_1.ycor()>-250)):
+            paddle_1.sety(a - 2)
+        if (paddle_1.ycor() > ball.ycor() and
+           paddle_1. ycor() < 250 and
+           paddle_1.ycor() > -250):
             a = paddle_1.ycor()
             paddle_1.sety(a - 2)
         else:
-            paddle_1.sety(a+2)
+            paddle_1.sety(a + 2)
 
-    if((score_1>=5)or(score_2>=5)):
+    # fim de jogo
+    if (score_1 >= 5) or (score_2 >= 5):
         GameOn = False
         if score_2 == 5:
             print("Parabéns jogador 2!")
