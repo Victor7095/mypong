@@ -151,12 +151,22 @@ def map_keys():
         screen.onkeypress(paddle_2_down, "Down")
 
 
-# ajustar a velocidade da bola
+# ajusta a velocidade da bola
 def update_ball_speed(paddle):
     print(ball.dx, ball.dy)
     ball.dx = ball.dx + 0.1 if ball.dx > 0 else ball.dx - 0.1
     segment = int(abs(paddle.ycor()-ball.ycor()) / 8)/10
     ball.dy = 0.5 + segment if ball.dy > 0 else -0.5 - segment
+
+
+# reseta velocidade e posição da raquete e bola
+def reset_positions():
+    ball.dx = ball.dy = 0.5
+    ball.goto(0, 0)
+    ball.dx *= -1
+    paddle_1.goto(-350, 0)
+    paddle_2.goto(350, 0)
+    time.sleep(1)
 
 
 # criar a tela principal do jogo
@@ -226,9 +236,7 @@ def game():
             board_2.clear()
             write_message(board_2, score_2, 35)
             os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
-            ball.dx = ball.dy = 0.5
-            ball.goto(0, 0)
-            ball.dx *= -1
+            reset_positions()
 
         # colisão com a parede direita
         if ball.xcor() > 385:
@@ -236,9 +244,7 @@ def game():
             board_1.clear()
             write_message(board_1, score_1, 35)
             os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
-            ball.dx = ball.dy = 0.5
-            ball.goto(0, 0)
-            ball.dx *= -1
+            reset_positions()
 
         # colisão com a raquete 1
         if (ball.xcor() < -330 and
