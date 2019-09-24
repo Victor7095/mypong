@@ -153,9 +153,10 @@ def map_keys():
 
 # ajustar a velocidade da bola
 def update_ball_speed(paddle):
-    ball.dx = ball.dx + 1 if ball.dx > 0 else ball.dx - 1
-    segment = int(abs(paddle.ycor()-ball.ycor()) / 8)
-    ball.dy = 2 + segment if ball.dy > 0 else -2 - segment
+    print(ball.dx, ball.dy)
+    ball.dx = ball.dx + 0.1 if ball.dx > 0 else ball.dx - 0.1
+    segment = int(abs(paddle.ycor()-ball.ycor()) / 8)/10
+    ball.dy = 0.5 + segment if ball.dy > 0 else -0.5 - segment
 
 
 # criar a tela principal do jogo
@@ -225,7 +226,7 @@ def game():
             board_2.clear()
             write_message(board_2, score_2, 35)
             os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
-            ball.dx = ball.dy = 2
+            ball.dx = ball.dy = 0.5
             ball.goto(0, 0)
             ball.dx *= -1
 
@@ -235,22 +236,22 @@ def game():
             board_1.clear()
             write_message(board_1, score_1, 35)
             os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
-            ball.dx = ball.dy = 2
+            ball.dx = ball.dy = 0.5
             ball.goto(0, 0)
             ball.dx *= -1
 
         # colisão com a raquete 1
         if (ball.xcor() < -330 and
-           ball.ycor() < paddle_1.ycor() + 50 and
-           ball.ycor() > paddle_1.ycor() - 50):
+            ball.ycor() < paddle_1.ycor() + 50 and
+                ball.ycor() > paddle_1.ycor() - 50):
             ball.dx *= -1
             os.system("aplay bounce.wav&")
             update_ball_speed(paddle_1)
 
         # colisão com a raquete 2
         if (ball.xcor() > 330 and
-           ball.ycor() < paddle_2.ycor() + 50 and
-           ball.ycor() > paddle_2.ycor() - 50):
+            ball.ycor() < paddle_2.ycor() + 50 and
+                ball.ycor() > paddle_2.ycor() - 50):
             ball.dx *= -1
             os.system("aplay bounce.wav&")
             update_ball_speed(paddle_2)
@@ -258,15 +259,15 @@ def game():
         # raquetes em modo de jogo 1 e 0
         if game_mode == '1' or game_mode == '0':
             if (paddle_2.ycor() < ball.ycor() and
-               paddle_2.ycor() < 250 and
-               paddle_2.ycor() > -250):
+                paddle_2.ycor() < 250 and
+                    paddle_2.ycor() > -250):
                 a = paddle_2.ycor()
                 paddle_2.sety(a + 2)
             else:
                 paddle_2.sety(a - 2)
             if (paddle_2.ycor() > ball.ycor() and
-               paddle_2.ycor() < 250 and
-               paddle_2.ycor() > -250):
+                paddle_2.ycor() < 250 and
+                    paddle_2.ycor() > -250):
                 a = paddle_2.ycor()
                 paddle_2.sety(a - 2)
             else:
@@ -274,15 +275,15 @@ def game():
 
         if game_mode == '0':
             if (paddle_1.ycor() < ball.ycor() and
-               paddle_1.ycor() < 250 and
-               paddle_1.ycor() > -250):
+                paddle_1.ycor() < 250 and
+                    paddle_1.ycor() > -250):
                 a = paddle_1.ycor()
                 paddle_1.sety(a + 2)
             else:
                 paddle_1.sety(a - 2)
             if (paddle_1.ycor() > ball.ycor() and
-               paddle_1. ycor() < 250 and
-               paddle_1.ycor() > -250):
+                paddle_1. ycor() < 250 and
+                    paddle_1.ycor() > -250):
                 a = paddle_1.ycor()
                 paddle_1.sety(a - 2)
             else:
