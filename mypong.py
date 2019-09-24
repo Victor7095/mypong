@@ -6,10 +6,10 @@
 # som pontuação https://freesound.org/people/Kodack/sounds/258020/
 
 
-import turtle
 import os
-import random
 import time
+import turtle
+import sys
 
 
 # escrever mensagens e texos
@@ -34,7 +34,8 @@ def start_game(screen):
         '''Choice your game mode \n
     0 - Bot VS Bot \n
     1 - Player VS Bot \n
-    2 - Player VS Player''']
+    2 - Player VS Player \n
+    3 - Exit''']
 
     start = turtle.Turtle()
     start.color("white")
@@ -49,8 +50,14 @@ def start_game(screen):
             write_message(start, mensagens[3], 30)
             global game_mode
             game_mode = 0
-            while game_mode != '0' and game_mode != '1' and game_mode != '2':
-                game_mode = screen.textinput('Game mode', 'Choice 0, 1 or 2')
+            while (game_mode != '0' and
+                   game_mode != '1' and
+                   game_mode != '2' and
+                   game_mode != '3'):
+                game_mode = screen.textinput(
+                    'Game mode', 'Choose 0, 1, 2 or 3')
+            if(game_mode == '3'):
+                sys.exit(0)
             start.clear()
 
 
@@ -317,4 +324,4 @@ while True:
     # chamando a tela principal
     game()
     # pequena pausa antes de iniciar outra partida
-    time.sleep(5)
+    time.sleep(4)
