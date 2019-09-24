@@ -31,11 +31,11 @@ def start_game(screen):
     mensagens = [
         'Welcome to Pong',
         'Are you ready?', 'GO!',
-        '''Choice your game mode \n
+        '''Choose your game mode \n
     0 - Bot VS Bot \n
     1 - Player VS Bot \n
     2 - Player VS Player \n
-    3 - Exit''']
+    3 - Exit \n''']
 
     start = turtle.Turtle()
     start.color("white")
@@ -47,7 +47,7 @@ def start_game(screen):
         start.clear()
         if i == 0:
             # usuário escolhendo o modo de jogo
-            write_message(start, mensagens[3], 30)
+            write_message(start, mensagens[3], 20)
             global game_mode
             game_mode = 0
             while (game_mode != '0' and
