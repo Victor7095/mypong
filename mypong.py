@@ -182,10 +182,19 @@ def map_keys():
 # ajustar a velocidade da bola
 def update_ball_speed(paddle):
     os.system("aplay bounce.wav&")
+
+    # Calculando velocidade no eixo X
     ball.dx *= -1
-    ball.dx = ball.dx + 0.1 if ball.dx > 0 else ball.dx - 0.1
-    segment = int(abs(paddle.ycor()-ball.ycor()) / 8)/10
-    ball.dy = 0.5 + segment if ball.dy > 0 else -0.5 - segment
+    ball.dx = ball.dx + 0.05 if ball.dx > 0 else ball.dx - 0.05
+
+    # Calculando velocidade no eixo Y
+    segment = (int(abs(paddle.ycor()-ball.ycor()) / 8)/10) * 4
+
+    hit_upper_half = ball.ycor() > paddle.ycor() - 25
+
+    ball.dy = 0.5 * segment if ball.dy > 0 else -0.5 * segment
+    if(hit_upper_half and ball.dy < 0) or (not hit_upper_half and ball.dy > 0):
+        ball.dy *= -1
 
 
 # resetar a velocidade e posição da raquete e bola
