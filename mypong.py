@@ -147,6 +147,17 @@ def paddle_2_down():
     paddle_2.sety(y)
 
 
+# ajustar movimento do bot
+def update_bot_position(paddle):
+    paddle_y = paddle.ycor()
+    if (paddle_y < ball.ycor() and
+            paddle_y < 250):
+        paddle.sety(paddle_y + 2)
+    if (paddle_y > ball.ycor() and
+            paddle_y > -250):
+        paddle.sety(paddle_y - 2)
+
+
 # mapear as teclas
 def map_keys():
     screen.listen()
@@ -160,7 +171,8 @@ def map_keys():
 
 # ajusta a velocidade da bola
 def update_ball_speed(paddle):
-    print(ball.dx, ball.dy)
+    os.system("aplay bounce.wav&")
+    ball.dx *= -1
     ball.dx = ball.dx + 0.1 if ball.dx > 0 else ball.dx - 0.1
     segment = int(abs(paddle.ycor()-ball.ycor()) / 8)/10
     ball.dy = 0.5 + segment if ball.dy > 0 else -0.5 - segment
@@ -225,16 +237,11 @@ def game():
         ball.setx(ball.xcor() + ball.dx)
         ball.sety(ball.ycor() + ball.dy)
 
-        # colisão com a parede superior
-        if ball.ycor() > 287:
+        # colisão com a parede superior e inferior
+        if ball.ycor() > 287 or ball.ycor() < -277:
             os.system("aplay bounce.wav&")
-            ball.sety(287)
-            ball.dy *= -1
-
-        # colisão com a parede inferior
-        if ball.ycor() < -277:
-            os.system("aplay bounce.wav&")
-            ball.sety(-277)
+            new_y = 287 if ball.ycor() > 0 else -277
+            ball.sety(new_y)
             ball.dy *= -1
 
         # colisão com a parede esquerda
@@ -257,50 +264,20 @@ def game():
         if (ball.xcor() < -330 and
             ball.ycor() < paddle_1.ycor() + 50 and
                 ball.ycor() > paddle_1.ycor() - 50):
-            ball.dx *= -1
-            os.system("aplay bounce.wav&")
             update_ball_speed(paddle_1)
 
         # colisão com a raquete 2
         if (ball.xcor() > 330 and
             ball.ycor() < paddle_2.ycor() + 50 and
                 ball.ycor() > paddle_2.ycor() - 50):
-            ball.dx *= -1
-            os.system("aplay bounce.wav&")
             update_ball_speed(paddle_2)
 
         # raquetes em modo de jogo 1 e 0
         if game_mode == '1' or game_mode == '0':
-            if (paddle_2.ycor() < ball.ycor() and
-                paddle_2.ycor() < 250 and
-                    paddle_2.ycor() > -250):
-                a = paddle_2.ycor()
-                paddle_2.sety(a + 2)
-            else:
-                paddle_2.sety(a - 2)
-            if (paddle_2.ycor() > ball.ycor() and
-                paddle_2.ycor() < 250 and
-                    paddle_2.ycor() > -250):
-                a = paddle_2.ycor()
-                paddle_2.sety(a - 2)
-            else:
-                paddle_2.sety(a + 2)
+            update_bot_position(paddle_2)
 
         if game_mode == '0':
-            if (paddle_1.ycor() < ball.ycor() and
-                paddle_1.ycor() < 250 and
-                    paddle_1.ycor() > -250):
-                a = paddle_1.ycor()
-                paddle_1.sety(a + 2)
-            else:
-                paddle_1.sety(a - 2)
-            if (paddle_1.ycor() > ball.ycor() and
-                paddle_1. ycor() < 250 and
-                    paddle_1.ycor() > -250):
-                a = paddle_1.ycor()
-                paddle_1.sety(a - 2)
-            else:
-                paddle_1.sety(a + 2)
+            update_bot_position(paddle_1)
 
         # fim de jogo: determinando o vencedor
         if (score_1 >= 5) or (score_2 >= 5):
