@@ -36,7 +36,7 @@ def start_game(screen):
     3 - Exit''',
         '''Developed by: \n
     Yasmin Maria Muniz de Oliveira \n
-    Victor Ian Pereira e Lima \n
+    Victor Yan Pereira e Lima \n
     Vinicius Soares da Costa \n
     Rafael Maquine Lopes''']
 
