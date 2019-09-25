@@ -8,6 +8,7 @@
 import os
 import time
 import turtle
+import random
 
 
 # escrever mensagens e texos
@@ -37,8 +38,11 @@ def start_game(screen):
         '''Developed by: \n
     Yasmin Maria Muniz de Oliveira \n
     Victor Yan Pereira e Lima \n
+    Vanessa De Souza Câmara\n
     Vinicius Soares da Costa \n
-    Rafael Maquine Lopes''']
+    Rafael Maquine Lopes\n
+    Williams \n
+    ''']
 
     start = turtle.Turtle()
     start.color('white')
@@ -51,7 +55,7 @@ def start_game(screen):
         if i == 0:
             start.penup()
             start.goto(0, -180)
-            write_message(start, mensagens[4], 30)
+            write_message(start, mensagens[4], 20)
             time.sleep(5)
             start.clear()
             # usuário escolhendo o modo de jogo
@@ -162,12 +166,16 @@ def update_bot_position(paddle):
     paddle_y = paddle.ycor()
     if (paddle_y < ball.ycor() and
             paddle_y < 250):
-        paddle.sety(paddle_y + 2)
+        chance_de_se_mover = random.randint(1,5)
+        if chance_de_se_mover == 1:
+            paddle.sety(paddle_y + 2)
     if (paddle_y > ball.ycor() and
             paddle_y > -250):
-        paddle.sety(paddle_y - 2)
+        chance_de_se_mover = random.randint(1,5)
+        if chance_de_se_mover == 1:
+            paddle.sety(paddle_y - 2)
 
-
+    
 # mapear as teclas
 def map_keys():
     screen.listen()
@@ -199,11 +207,13 @@ def update_ball_speed(paddle):
 
 # resetar a velocidade e posição da raquete e bola
 def reset_positions():
-    ball.dx = ball.dy = 0.5
+    ball.dx = 0.5 if random.randint(1,2) == 1 else -0.5
+    ball.dy = 0.5 if random.randint(1,2) == 1 else -0.5
     ball.goto(0, 0)
     ball.dx *= -1
     paddle_1.goto(-350, 0)
     paddle_2.goto(350, 0)
+    screen.update()
     time.sleep(1)
 
 
@@ -280,15 +290,49 @@ def game():
             reset_positions()
 
         # colisão com a raquete 1
-        if (ball.xcor() < -330 and
+        """if (ball.xcor() < -330 and
+            ball.xcor() > -340 and
+            ball.ycor() + 10 >= paddle_1.ycor() and
+            ball.ycor() <= paddle_1.ycor()):
+            ball.dx *= -1
+            ball.dy *= -1
+        elif (ball.xcor() < -330 and
+            ball.xcor() > -340 and
+            ball.ycor() <= paddle_1.ycor() + 50 and
+            ball.ycor() + 10 >= paddle_1.ycor() + 50):
+            ball.dx *= -1
+            ball.dy *= -1
+
+        elif (ball.xcor() < -330 and
             ball.ycor() < paddle_1.ycor() + 50 and
                 ball.ycor() > paddle_1.ycor() - 50):
+            update_ball_speed(paddle_1)"""
+        if (ball.xcor() < -330 and
+            ball.ycor() < paddle_1.ycor() + 50 and
+            ball.ycor() > paddle_1.ycor() - 50):
             update_ball_speed(paddle_1)
 
         # colisão com a raquete 2
-        if (ball.xcor() > 330 and
+        """if (ball.xcor() < -330 and
+            ball.xcor() > -340 and
+            ball.ycor() + 10 >= paddle_2.ycor() and
+            ball.ycor() <= paddle_2.ycor()):
+            ball.dx *= -1
+            ball.dy *= -1
+        elif (ball.xcor() < -330 and
+            ball.xcor() > -340 and
+            ball.ycor() <= paddle_2.ycor() + 50 and
+            ball.ycor() + 10 >= paddle_2.ycor() + 50):
+            ball.dx *= -1
+            ball.dy *= -1
+
+        elif (ball.xcor() > 330 and
             ball.ycor() < paddle_2.ycor() + 50 and
                 ball.ycor() > paddle_2.ycor() - 50):
+            update_ball_speed(paddle_2)"""
+        if (ball.xcor() > 330 and
+            ball.ycor() < paddle_2.ycor() + 50 and
+            ball.ycor() > paddle_2.ycor() - 50):
             update_ball_speed(paddle_2)
 
         # raquetes em modo de jogo 1 e 0
