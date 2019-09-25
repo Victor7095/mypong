@@ -1,7 +1,6 @@
 # Jucimar Jr 2019
 # pong em turtle python https://docs.python.org/3.3/library/turtle.html
 # baseado em http://christianthompson.com/node/51
-# fonte Press Start 2P https://www.fontspace.com/codeman38/press-start-2p
 # fonte DS-Digital https://www.dafont.com/pt/ds-digital.font
 # som pontuação https://freesound.org/people/Kodack/sounds/258020/
 
@@ -9,12 +8,11 @@
 import os
 import time
 import turtle
-import sys
 
 
 # escrever mensagens e texos
 def write_message(sprite, text, tamanho):
-    sprite.write(text, align="center", font=("DS-Digital", tamanho, "normal"))
+    sprite.write(text, align='center', font=('DS-Digital', tamanho, 'normal'))
 
 
 # criar a tela inicial do jogo (inicializar)
@@ -22,23 +20,28 @@ def start_game(screen):
 
     # desenhando a tela
     screen.clear()
-    screen.title("My Pong")
-    screen.bgcolor("#377352")
+    screen.title('My Pong')
+    screen.bgcolor('#2E6145')
     screen.setup(width=800, height=600)
     screen.tracer(100)
 
     # mensagens e configurações iniciais
     mensagens = [
-        'Welcome to Pong',
+        'Welcome to Pong!',
         'Are you ready?', 'GO!',
         '''Choose your game mode \n
     0 - Bot VS Bot \n
     1 - Player VS Bot \n
     2 - Player VS Player \n
-    3 - Exit \n''']
+    3 - Exit''',
+        '''Developed by: \n
+    Yasmin Maria Muniz de Oliveira \n
+    Victor Ian Pereira e Lima \n
+    Vinicius Soares da Costa \n
+    Rafael Maquine Lopes''']
 
     start = turtle.Turtle()
-    start.color("white")
+    start.color('white')
     start.penup()
     start.hideturtle()
     for i in range(3):
@@ -46,8 +49,13 @@ def start_game(screen):
         time.sleep(1.5)
         start.clear()
         if i == 0:
+            start.penup()
+            start.goto(0, -180)
+            write_message(start, mensagens[4], 30)
+            time.sleep(5)
+            start.clear()
             # usuário escolhendo o modo de jogo
-            write_message(start, mensagens[3], 20)
+            write_message(start, mensagens[3], 30)
             global game_mode
             game_mode = 0
             while (game_mode != '0' and
@@ -57,8 +65,10 @@ def start_game(screen):
                 game_mode = screen.textinput(
                     'Game mode', 'Choose 0, 1, 2 or 3')
             if(game_mode == '3'):
-                sys.exit(0)
+                screen.bye()
             start.clear()
+        start.penup()
+        start.goto(0, 0)
 
 
 # desenhar raquetes e bola (e alguns outros sprites)
@@ -68,7 +78,7 @@ def drawn_sprites(sprite, shape, color, x):
     sprite.penup()
     sprite.goto(x, 0)
     if shape == 'square':
-        sprite.color("black", color)
+        sprite.color('black', color)
         sprite.shapesize(stretch_wid=5, stretch_len=1)
     else:
         sprite.color(color)
@@ -77,7 +87,7 @@ def drawn_sprites(sprite, shape, color, x):
 # desenhar o display da pontuação
 def create_boards(board, color, x):
     board.speed(0)
-    board.shape("square")
+    board.shape('square')
     board.color(color)
     board.penup()
     board.hideturtle()
@@ -88,7 +98,7 @@ def create_boards(board, color, x):
 # desenhar a rede (tracejados do centro)
 def create_dashed():
     dashed = turtle.Turtle()
-    dashed.color("white")
+    dashed.color('white')
     dashed.penup()
     dashed.hideturtle()
     axis_y = 0
@@ -103,7 +113,7 @@ def create_line(x1, y1, x2, y2):
     line = turtle.Turtle()
     line.penup()
     line.setpos(x1, y1)
-    line.color("white")
+    line.color('white')
     line.pendown()
     line.setpos(x2, y2)
     line.hideturtle()
@@ -162,14 +172,14 @@ def update_bot_position(paddle):
 def map_keys():
     screen.listen()
     if game_mode == '2' or game_mode == '1':
-        screen.onkeypress(paddle_1_up, "w")
-        screen.onkeypress(paddle_1_down, "s")
+        screen.onkeypress(paddle_1_up, 'w')
+        screen.onkeypress(paddle_1_down, 's')
     if game_mode == '2':
-        screen.onkeypress(paddle_2_up, "Up")
-        screen.onkeypress(paddle_2_down, "Down")
+        screen.onkeypress(paddle_2_up, 'Up')
+        screen.onkeypress(paddle_2_down, 'Down')
 
 
-# ajusta a velocidade da bola
+# ajustar a velocidade da bola
 def update_ball_speed(paddle):
     os.system("aplay bounce.wav&")
     ball.dx *= -1
@@ -178,7 +188,7 @@ def update_ball_speed(paddle):
     ball.dy = 0.5 + segment if ball.dy > 0 else -0.5 - segment
 
 
-# reseta velocidade e posição da raquete e bola
+# resetar a velocidade e posição da raquete e bola
 def reset_positions():
     ball.dx = ball.dy = 0.5
     ball.goto(0, 0)
@@ -195,24 +205,24 @@ def game():
     # as paddles precisam ser globais por causa das funções move_paddle
     global paddle_1
     paddle_1 = turtle.Turtle()
-    drawn_sprites(paddle_1, "square", "#5ca3ff", -350)
+    drawn_sprites(paddle_1, 'square', '#5ca3ff', -350)
     global paddle_2
     paddle_2 = turtle.Turtle()
-    drawn_sprites(paddle_2, "square", "#ff6161", 350)
+    drawn_sprites(paddle_2, 'square', '#ff6161', 350)
 
     # criando a bola
     # a bola precisa ser global por causa da função update_ball_speed
     global ball
     ball = turtle.Turtle()
-    drawn_sprites(ball, "circle", "#e8971e", 0)
+    drawn_sprites(ball, 'circle', '#e8971e', 0)
     ball.dx = 0.5
     ball.dy = 0.5
 
     # criando o display da pontuação
     board_1 = turtle.Turtle()
-    create_boards(board_1, "#5ca3ff", -100)
+    create_boards(board_1, '#5ca3ff', -100)
     board_2 = turtle.Turtle()
-    create_boards(board_2, "#ff6161", 100)
+    create_boards(board_2, '#ff6161', 100)
 
     # criando as linhas e a rede
     create_dashed()
@@ -249,7 +259,7 @@ def game():
             score_2 += 1
             board_2.clear()
             write_message(board_2, score_2, 35)
-            os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
+            os.system('aplay 258020__kodack__arcade-bleep-sound.wav&')
             reset_positions()
 
         # colisão com a parede direita
@@ -257,7 +267,7 @@ def game():
             score_1 += 1
             board_1.clear()
             write_message(board_1, score_1, 35)
-            os.system("aplay 258020__kodack__arcade-bleep-sound.wav&")
+            os.system('aplay 258020__kodack__arcade-bleep-sound.wav&')
             reset_positions()
 
         # colisão com a raquete 1
