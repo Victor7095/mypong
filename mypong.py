@@ -1,7 +1,6 @@
 # Jucimar Jr 2019
 # pong em turtle python https://docs.python.org/3.3/library/turtle.html
 # baseado em http://christianthompson.com/node/51
-# fonte Press Start 2P https://www.fontspace.com/codeman38/press-start-2p
 # fonte DS-Digital https://www.dafont.com/pt/ds-digital.font
 # som pontuação https://freesound.org/people/Kodack/sounds/258020/
 
@@ -34,7 +33,12 @@ def start_game(screen):
     0 - Bot VS Bot \n
     1 - Player VS Bot \n
     2 - Player VS Player \n
-    3 - Exit \n''']
+    3 - Exit''',
+        '''Developed by: \n
+    Yasmin Maria Muniz de Oliveira \n
+    Victor Ian Pereira e Lima \n
+    Vinicius Soares da Costa \n
+    Rafael Maquine Lopes''']
 
     start = turtle.Turtle()
     start.color('white')
@@ -45,9 +49,12 @@ def start_game(screen):
         time.sleep(1.5)
         start.clear()
         if i == 0:
-            # usuário escolhendo o modo de jogo
             start.penup()
-            start.goto(0, -220)
+            start.goto(0, -180)
+            write_message(start, mensagens[4], 30)
+            time.sleep(5)
+            start.clear()
+            # usuário escolhendo o modo de jogo
             write_message(start, mensagens[3], 30)
             global game_mode
             game_mode = 0
@@ -272,7 +279,7 @@ def game():
             os.system('aplay bounce.wav&')
             update_ball_speed(paddle_2)
 
-        # raquetes em modo de jogo 0 e 1
+        # raquetes em modo de jogo 1 e 0
         if game_mode == '1' or game_mode == '0':
             if (paddle_2.ycor() < ball.ycor() and
                 paddle_2.ycor() < 250 and
